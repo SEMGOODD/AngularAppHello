@@ -1,9 +1,7 @@
 name: Deploy Angular to GitHub Pages
-
 on:
   push:
     branches: [ main ]
-
 permissions:
   contents: write
 
@@ -16,19 +14,19 @@ jobs:
         with:
           node-version: 20
           cache: npm
-
       - run: npm ci
 
-      - name: Build (prod) with correct base-href
+      - name: Build (prod)
         run: |
-          PROJECT=$(node -p "require('./angular.json').projects[0].name")
-          npx ng build --configuration=production --base-href "/${{ github.event.repository.name }}/"
+          P PROJECT=$(node -p "const a=require('./angular.json'); Object.keys(a.projects)[0]")
+          echo Using project: $PROJECT
+          npx ng build --configuration=production --project "$PROJECT" --base-href "/${{ github.event.repository.name }}/"
           echo "DIST=dist/$PROJECT/browser" >> "$GITHUB_ENV"
 
       - name: Deploy to gh-pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-            branch: gh-pages
-            folder: ${{ env.DIST }}
-            clean: true
-            single-commit: true
+          branch: gh-pages
+          folder: ${{ env.DIST }}
+          clean: true
+          single-commit: true
