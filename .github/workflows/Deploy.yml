@@ -28,7 +28,7 @@ jobs:
       - name: Deploy to gh-pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          branch: gh-pages
           folder: ${{ env.DIST }}
+          branch: gh-pages
           clean: true
           single-commit: true
