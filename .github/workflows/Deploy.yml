@@ -21,7 +21,7 @@ jobs:
 
       - name: Build (prod) with correct base-href
         run: |
-          PROJECT=$(node -p "require('./angular.json').defaultProject")
+          PROJECT=$(node -p "require('./angular.json').projects[0].name")
           npx ng build --configuration=production --base-href "/${{ github.event.repository.name }}/"
           echo "DIST=dist/$PROJECT/browser" >> "$GITHUB_ENV"
 
