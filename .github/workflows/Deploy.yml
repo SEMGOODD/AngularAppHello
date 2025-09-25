@@ -24,8 +24,10 @@ jobs:
           npx ng build --configuration=production --project "$PROJECT" --base-href "/${{ github.event.repository.name }}/"
           echo "DIST=dist/$PROJECT/browser" >> "$GITHUB_ENV" 
 
-      - name: Deploy to gh-pages
-        uses: JamesIves/github-pages-deploy-action@v4
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          folder: ${{ env.DIST }}
-          branch: gh-pages
+          path: ${{ env.DIST }}
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
