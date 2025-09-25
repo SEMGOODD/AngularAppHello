@@ -1,0 +1,17 @@
+name: Lint CI
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  lint_ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3 # Check out the repository into the GitHub runner
+      - uses: actions/setup-node@v3 # Check out node version
+        with:
+          node-version: '20'
+          cache: 'npm' # Enables npm cache between runs for speed
+
+      - run: npm ci # Clean, reproducible install from package-lock.json
+      - run: npm run lint  
