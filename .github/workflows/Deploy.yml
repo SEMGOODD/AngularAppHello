@@ -1,4 +1,4 @@
-name: Deploy Angular to GitHub Pages 
+name: Deploy Angular to GitHub Pages
 
 on:
   push:
@@ -9,25 +9,26 @@ permissions:
 
 jobs:
   build-and-deploy:
-    runs-on: ubuntu-latest # Linux runner
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3   # Get the repo code
-      - uses: actions/setup-node@v3 # Install Node
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'npm'
+          node-version: 20
+          cache: npm
 
-      - run: npm ci 
-      - name: Build Hello-Angular
+      - run: npm ci
+
+      - name: Build (prod) with correct base-href
         run: |
-          PROJECT=$(node -p "require('./angular.json').defaultProject")  
-          npx ng build --configuration=production \
-            --base-href "/${{ github.event.repository.name }}/"
-          echo "DIST=dist/$PROJECT/browser" >> $GITHUB_ENV
+          PROJECT=$(node -p "require('./angular.json').defaultProject")
+          npx ng build --configuration=production --base-href "/${{ github.event.repository.name }}/"
+          echo "DIST=dist/$PROJECT/browser" >> "$GITHUB_ENV"
 
-      - name: Deploy with angular-cli-ghpages
-        uses: JamesIves/github-pages-deploy-action@v3
+      - name: Deploy to gh-pages
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
-          branch: gh-pages
-          folder: ${{env.PUBLISHER_DIR}}
-          clean: true
+            branch: gh-pages
+            folder: ${{ env.DIST }}
+            clean: true
+            single-commit: true
