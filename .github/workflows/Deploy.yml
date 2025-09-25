@@ -21,14 +21,11 @@ jobs:
       - name: Build (prod)
         run: |
           PROJECT=$(node -p "const a=require('./angular.json'); Object.keys(a.projects)[0]")
-          echo "Using project: $PROJECT"
           npx ng build --configuration=production --project "$PROJECT" --base-href "/${{ github.event.repository.name }}/"
-          echo "DIST=dist/$PROJECT/browser" >> "$GITHUB_ENV"
+          echo "DIST=dist/$PROJECT/browser" >> "$GITHUB_ENV" 
 
       - name: Deploy to gh-pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: ${{ env.DIST }}
           branch: gh-pages
-          clean: true
-          single-commit: true
